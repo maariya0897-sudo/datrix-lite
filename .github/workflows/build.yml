@@ -25,11 +25,14 @@ jobs:
           pip install --upgrade pip setuptools
           pip install "cython<3.0.0" buildozer
 
-      - name: Build APK with Buildozer
+      - name: Build APK with Pre-installed Android SDK
+        env:
+          ANDROID_HOME: /usr/local/lib/android/sdk
+          ANDROID_NDK_HOME: /usr/local/lib/android/sdk/ndk/25.2.9519653
         run: |
           mkdir -p ~/.android
           touch ~/.android/repositories.cfg
-          buildozer -v android debug
+          yes | buildozer -v android debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
