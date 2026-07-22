@@ -1,4 +1,4 @@
-name: Build Android APK
+namename: Build Android APK
 
 on:
   push:
@@ -21,18 +21,14 @@ jobs:
       - name: Install System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential libssl-dev libffi-dev python3-dev ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev openjdk-17-jdk autoconf libtool pkg-config libncurses5-dev libncursesw5-dev cmake
+          sudo apt-get install -y build-essential libssl-dev libffi-dev python3-dev ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev openjdk-17-jdk autoconf libtool pkg-config libncurses5-dev libncursesw5-dev cmake zip unzip
           pip install --upgrade pip setuptools
           pip install "cython<3.0.0" buildozer
 
-      - name: Build APK with Pre-installed Android SDK
-        env:
-          ANDROID_HOME: /usr/local/lib/android/sdk
-          ANDROID_NDK_HOME: /usr/local/lib/android/sdk/ndk/25.2.9519653
+      - name: Accept Licenses & Build APK
         run: |
-          mkdir -p ~/.android
-          touch ~/.android/repositories.cfg
-          yes | buildozer -v android debug
+          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          buildozer -v android debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
